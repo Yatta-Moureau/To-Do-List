@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rhodes Island Operator Dashboard — Tactical Task Management">
+  <title>Rhodes Island — Operator Dashboard</title>
+
+  <!-- Fonts: Rajdhani (tactical UI) + JetBrains Mono (data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Theme bootstrap: prevent flash -->
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('pd_theme');
+        document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- Background Decoration -->
+  <div class="bg-decoration" aria-hidden="true">
+    <div class="bg-gradient bg-gradient-1"></div>
+    <div class="bg-gradient bg-gradient-2"></div>
+    <div class="bg-grid"></div>
+  </div>
+
+  <div class="dashboard-container">
+    <!-- ============================================================
+         HEADER — Tactical Navbar
+         ============================================================ -->
+    <header class="app-header" role="banner">
+      <div class="header-left">
+        <!-- RI Logo -->
+        <div class="ri-logo" aria-label="Rhodes Island">
+          <div class="ri-logo-hex">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 2L36 11V29L20 38L4 29V11L20 2Z" stroke="var(--cyan)" stroke-width="1.5" fill="none" opacity="0.6"/>
+              <path d="M20 8L30 14V26L20 32L10 26V14L20 8Z" fill="var(--cyan)" opacity="0.15"/>
+              <text x="20" y="23" text-anchor="middle" fill="var(--cyan)" font-family="Rajdhani, sans-serif" font-size="11" font-weight="700">RI</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div id="header-greeting-area" class="header-greeting-area" aria-live="polite">
+          <time id="header-time" class="header-time" aria-label="Current time">00<span class="colon">:</span>00<span class="seconds-display">:00</span></time>
+          <p id="header-date" class="header-date">Loading date...</p>
+          <p id="header-greeting" class="header-greeting">Good morning, Operator</p>
+        </div>
+        <h1 class="app-title">Operator Dashboard</h1>
+      </div>
+
+      <div class="header-right">
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle day/night theme" title="Toggle theme">
+          <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <span class="theme-toggle-label-night">NIGHT</span>
+          <span class="theme-toggle-label-day">DAY</span>
+        </button>
+
+        <button id="settings-open" class="icon-button" aria-label="Open settings" title="Settings" style="margin-left: var(--sp-sm);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         MAIN CONTENT
+         ============================================================ -->
+    <main class="dashboard-main" role="main">
+      <!-- Two-column: Timer + Todo -->
+      <div class="widget-grid">
+        <!-- Timer Widget -->
+        <section id="timer-widget" class="widget timer-widget" aria-labelledby="timer-heading">
+          <div class="widget-header">
+            <h2 id="timer-heading" class="widget-title"><span class="accent">⟐</span> Focus Timer</h2>
+            <span id="timer-segment-count" class="badge" aria-label="Minutes remaining">25</span>
+          </div>
+
+          <div class="timer-display-wrapper">
+            <div id="timer-display" class="timer-display" role="timer" aria-live="polite">25:00</div>
+            <!-- Segmented bar: 25 blocks -->
+            <div id="timer-segments" class="timer-segments" aria-hidden="true"></div>
+          </div>
+
+          <div class="timer-controls">
+            <button id="timer-start" class="btn btn-primary btn-lg" title="Start timer (Space)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Start
+              <span class="kbd-hint" aria-hidden="true">Space</span>
+            </button>
+            <button id="timer-stop" class="btn btn-outline" title="Pause timer (Space)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+              </svg>
+              Stop
+              <span class="kbd-hint" aria-hidden="true">Space</span>
+            </button>
+            <button id="timer-reset" class="btn btn-ghost">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              Reset
+            </button>
+          </div>
+
+          <p id="timer-alert" class="alert alert-success" role="alert" hidden></p>
+        </section>
+
+        <!-- Todo Widget -->
+        <section id="todo-widget" class="widget todo-widget" aria-labelledby="todo-heading">
+          <div class="widget-header">
+            <h2 id="todo-heading" class="widget-title"><span class="accent">⟐</span> Tasks</h2>
+            <span id="todo-count" class="badge" aria-label="Number of tasks">0</span>
+          </div>
+
+          <div class="todo-input-group">
+            <select id="todo-priority" class="priority-select" aria-label="Task priority">
+              <option value="low">LOW</option>
+              <option value="med" selected>MED</option>
+              <option value="high">HIGH</option>
+            </select>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="todo-input"
+                class="input"
+                placeholder="New task, Operator..."
+                maxlength="200"
+                aria-label="New task text"
+                autocomplete="off"
+              >
+            </div>
+            <button id="todo-add" class="btn btn-primary" aria-label="Add task">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+
+          <div class="todo-controls">
+            <div class="select-wrapper">
+              <select id="todo-sort" class="select" aria-label="Sort tasks">
+                <option value="default">Default order</option>
+                <option value="priority">By priority</option>
+                <option value="alpha-asc">Alphabetical</option>
+                <option value="completed-last">Incomplete first</option>
+              </select>
+              <svg class="select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <ul id="todo-list" class="todo-list" aria-label="Task list"></ul>
+          <p id="todo-error" class="alert alert-error" role="alert" hidden></p>
+        </section>
+      </div>
+
+      <!-- Quick Links Widget -->
+      <section id="links-widget" class="widget links-widget" aria-labelledby="links-heading">
+        <div class="widget-header">
+          <h2 id="links-heading" class="widget-title"><span class="accent">⟐</span> Quick Links</h2>
+        </div>
+
+        <div class="links-input-group">
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="link-label-input"
+              class="input"
+              placeholder="Label (e.g., GitHub)"
+              maxlength="50"
+              aria-label="Link label"
+              autocomplete="off"
+            >
+          </div>
+          <div class="input-wrapper">
+            <input
+              type="url"
+              id="link-url-input"
+              class="input"
+              placeholder="URL (e.g., github.com)"
+              maxlength="2048"
+              aria-label="Link URL"
+              autocomplete="off"
+            >
+          </div>
+          <button id="link-add" class="btn btn-primary" aria-label="Add link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Add
+          </button>
+        </div>
+
+        <div id="links-list" class="links-list" aria-label="Quick links list"></div>
+        <p id="links-error" class="alert alert-error" role="alert" hidden></p>
+      </section>
+    </main>
+
+    <!-- ============================================================
+         SETTINGS PANEL
+         ============================================================ -->
+    <aside id="settings-panel" class="settings-panel" aria-labelledby="settings-heading" aria-hidden="true">
+      <div class="settings-header">
+        <h2 id="settings-heading" class="widget-title" style="font-size: var(--font-size-lg);"><span class="accent">⟐</span> Settings</h2>
+        <button id="settings-close" class="icon-button" aria-label="Close settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="settings-content">
+        <div class="settings-section">
+          <label for="settings-name" class="settings-label">Operator Name</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="settings-name"
+              class="input"
+              placeholder="Enter your codename"
+              maxlength="50"
+              aria-label="Operator name"
+              autocomplete="off"
+            >
+          </div>
+          <p id="settings-name-error" class="alert alert-error" role="alert" hidden></p>
+          <button id="settings-name-save" class="btn btn-primary btn-full">Save Codename</button>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-section">
+          <label class="settings-label">Alarm Sound</label>
+          <div class="input-wrapper">
+            <input
+              type="file"
+              id="settings-sound-input"
+              class="input"
+              accept="audio/mpeg,audio/*"
+              aria-label="Upload alarm sound (MP3)"
+            >
+          </div>
+          <p id="settings-sound-status" class="settings-sound-status">No custom sound set.</p>
+          <div class="sound-controls">
+            <button id="settings-sound-preview" class="btn btn-outline btn-full" disabled aria-label="Preview alarm sound">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              </svg>
+              Preview
+            </button>
+            <button id="settings-sound-remove" class="btn btn-ghost btn-full" disabled aria-label="Remove custom alarm sound">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+              Remove Sound
+            </button>
+          </div>
+          <p id="settings-sound-error" class="alert alert-error" role="alert" hidden></p>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-section">
+          <label class="settings-label">Data Backup</label>
+          <p class="settings-sound-status">Export or restore all your tasks, links, and settings.</p>
+          <button id="data-export-btn" class="btn btn-outline btn-full">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Export Data
+          </button>
+          <input type="file" id="data-import-input" accept=".json" style="display:none" aria-label="Import backup JSON file">
+          <button id="data-import-btn" class="btn btn-ghost btn-full">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            Import Data
+          </button>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-section">
+          <label for="settings-duration" class="settings-label">Focus Duration (min)</label>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              id="settings-duration"
+              class="input"
+              min="1"
+              max="120"
+              step="1"
+              aria-label="Focus duration in minutes"
+            >
+          </div>
+          <p id="settings-duration-error" class="alert alert-error" role="alert" hidden></p>
+          <button id="settings-duration-save" class="btn btn-primary btn-full">Save Duration</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Overlay -->
+    <div id="settings-overlay" class="settings-overlay" hidden></div>
+  </div>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
