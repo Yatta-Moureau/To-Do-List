@@ -1,0 +1,7 @@
+node_modules/
+.freebuff/
+.freebuffpreview-*.log
+_free*.py
+_*.js
+*.log
+*.err
