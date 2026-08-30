@@ -4,7 +4,7 @@
   "description": "Personal dashboard — HTML/CSS/Vanilla JS new-tab page",
   "private": true,
   "scripts": {
-    "test": "jest --runInBand"
+    "test": "jest --runInBand --forceExit"
   },
   "devDependencies": {
     "fast-check": "3.22.0",

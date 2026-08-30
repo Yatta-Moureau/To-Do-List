@@ -1,349 +1,515 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Rhodes Island Operator Dashboard — Tactical Task Management">
-  <title>Rhodes Island — Operator Dashboard</title>
-
-  <!-- Fonts: Rajdhani (tactical UI) + JetBrains Mono (data) -->
+  <meta name="description" content="Our Time - Personal Dashboard — Modern Futuristic Dashboard">
+  <title>Our Time</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- Theme bootstrap: prevent flash -->
   <script>
-    (function() {
+    (function () {
       try {
-        var t = localStorage.getItem('pd_theme');
-        document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
+        var t = localStorage.getItem("pd_theme");
+        document.documentElement.setAttribute("data-theme", t === "light" ? "light" : "dark");
       } catch (e) {
-        document.documentElement.setAttribute('data-theme', 'light');
+        document.documentElement.setAttribute("data-theme", "dark");
       }
+      try {
+        var cv = JSON.parse(localStorage.getItem("pd_custom_theme") || "null");
+        var t2 = localStorage.getItem("pd_theme") || "dark";
+        if (cv && typeof cv === "object") {
+          var r = document.documentElement;
+          var isDark = t2 === "dark";
+          for (var k in cv) {
+            if (!cv.hasOwnProperty(k)) continue;
+            var v = cv[k];
+            // Only apply custom overrides that match current theme polarity
+            var isBgVar = k === "--bg-primary" || k === "--bg-card";
+            var isDarkVal = v && (v.charAt(0) === '#' && parseInt(v.slice(1,3),16) < 30);
+            if (isBgVar && isDark !== isDarkVal) {
+              // Skip mismatched overrides (e.g. dark preset applied to light theme)
+              continue;
+            }
+            r.style.setProperty(k, v);
+          }
+        }
+      } catch (e) {}
     })();
   </script>
 </head>
-<body>
-  <!-- Background Decoration -->
+<body><!-- Background Blueprint Modern Grid & Cybernetic Ambient Glow -->
   <div class="bg-decoration" aria-hidden="true">
+    <div class="bg-grid"></div>
     <div class="bg-gradient bg-gradient-1"></div>
     <div class="bg-gradient bg-gradient-2"></div>
-    <div class="bg-grid"></div>
   </div>
 
-  <div class="dashboard-container">
-    <!-- ============================================================
-         HEADER — Tactical Navbar
-         ============================================================ -->
+  <!-- Bouncing Background Images Container -->
+
+  <div id="bounce-images-container" class="bounce-images-container" aria-hidden="true"></div>
+
+
+
+  <div class="terminal-wrapper">
+    <!-- Top Modern Navbar Header (Matching Image 1) -->
     <header class="app-header" role="banner">
       <div class="header-left">
-        <!-- RI Logo -->
-        <div class="ri-logo" aria-label="Rhodes Island">
-          <div class="ri-logo-hex">
-            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 2L36 11V29L20 38L4 29V11L20 2Z" stroke="var(--cyan)" stroke-width="1.5" fill="none" opacity="0.6"/>
-              <path d="M20 8L30 14V26L20 32L10 26V14L20 8Z" fill="var(--cyan)" opacity="0.15"/>
-              <text x="20" y="23" text-anchor="middle" fill="var(--cyan)" font-family="Rajdhani, sans-serif" font-size="11" font-weight="700">RI</text>
+        <div class="ri-logo">
+          <div class="ri-logo-hex profile-photo-wrap" id="profile-photo-wrap" title="Click to change profile photo">
+            <img id="profile-photo-img" class="profile-photo-img" src="" alt="Profile" style="display:none">
+            <svg id="profile-photo-placeholder" viewBox="0 0 40 40" fill="none">
+              <path d="M20 2L37 11.5V30.5L20 40L3 30.5V11.5L20 2Z" fill="var(--cyan)"/>
+              <text x="20" y="26" text-anchor="middle" fill="#040913" font-family="'Rajdhani', sans-serif" font-size="14" font-weight="700" letter-spacing="0.05em">OT</text>
             </svg>
+            <input type="file" id="profile-photo-input" accept="image/*" style="display:none">
+          </div>
+          <div class="ri-titles">
+            <span class="ri-brand-title">OUR TIME</span>
+            <span class="ri-brand-subtitle">PERSONAL DASHBOARD</span>
           </div>
         </div>
       </div>
 
-      <div class="header-center">
-        <div id="header-greeting-area" class="header-greeting-area" aria-live="polite">
-          <time id="header-time" class="header-time" aria-label="Current time">00<span class="colon">:</span>00<span class="seconds-display">:00</span></time>
-          <p id="header-date" class="header-date">Loading date...</p>
-          <p id="header-greeting" class="header-greeting">Good morning, Operator</p>
-        </div>
-        <h1 class="app-title">Operator Dashboard</h1>
-      </div>
-
       <div class="header-right">
-        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle day/night theme" title="Toggle theme">
-          <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <span class="theme-toggle-label-night">NIGHT</span>
-          <span class="theme-toggle-label-day">DAY</span>
+        <!-- Live Glowing Modern Clock & Date Block -->
+        <div class="header-clock-block">
+          <time id="header-time" class="header-clock-time">07:52:20 AM</time>
+          <div id="header-date" class="header-clock-date">SATURDAY, AUGUST 29, 2026</div>
+        </div>
+
+        <!-- Modern Day / Night Toggle (Chamfered Corner Style) -->
+        <button id="theme-toggle" class="tactical-theme-toggle" aria-label="Toggle day / night mode">
+          <span class="theme-icon-slot">
+            <span class="theme-glyph">✱</span>
+          </span>
+          <span class="theme-label-day">DAY</span>
+          <span class="theme-label-night">NIGHT</span>
         </button>
 
-        <button id="settings-open" class="icon-button" aria-label="Open settings" title="Settings" style="margin-left: var(--sp-sm);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        <!-- Bounce Images Toggle -->
+        <button id="bounce-toggle" class="tactical-icon-btn" aria-label="Toggle bounce images" title="Toggle Bounce Images">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+            <circle cx="17.5" cy="6.5" r="3.5"/>
+          </svg>
+        </button>
+
+        <!-- Clear View Toggle -->
+        <button id="clear-view-toggle" class="tactical-icon-btn" aria-label="Toggle clear view" title="Clear View">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+          </svg>
+        </button>
+
+        <!-- Settings Drawer Toggle -->
+        <button id="settings-open" class="tactical-icon-btn" aria-label="Open settings" title="Terminal Settings">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
           </svg>
         </button>
       </div>
     </header>
 
-    <!-- ============================================================
-         MAIN CONTENT
-         ============================================================ -->
-    <main class="dashboard-main" role="main">
-      <!-- Two-column: Timer + Todo -->
-      <div class="widget-grid">
-        <!-- Timer Widget -->
-        <section id="timer-widget" class="widget timer-widget" aria-labelledby="timer-heading">
-          <div class="widget-header">
-            <h2 id="timer-heading" class="widget-title"><span class="accent">⟐</span> Focus Timer</h2>
-            <span id="timer-segment-count" class="badge" aria-label="Minutes remaining">25</span>
+    <!-- Modern Banner Status Card (Matching Image 2) -->
+    <section class="tactical-card banner-card">
+      <div class="card-bracket-tl"></div>
+      <div class="card-bracket-br"></div>
+      <div class="banner-main">
+        <div class="banner-meta" id="banner-meta">user / DASHBOARD / 08/29/2026</div>
+        <h1 id="banner-greeting" class="banner-title">Good morning, User</h1>
+        <p id="banner-stats" class="banner-subtitle">1/5 OBJECTIVES COMPLETE — 20% EFFICIENCY RATING</p>
+        <div class="banner-accent-bar"></div>
+      </div>
+      <div class="banner-status-cluster">
+        <div class="status-badge-box">
+          <span class="status-label">USER</span>
+          <span id="badge-operator" class="status-val status-active">ACTIVE</span>
+        </div>
+        <div class="status-badge-box">
+          <span class="status-label">ALERT</span>
+          <span id="badge-alert" class="status-val status-pending">PENDING</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Middle Grid: Focus Protocol (Pomodoro) + Quick Links (Matching Image 2) -->
+    <div class="middle-grid">
+      <!-- Focus Protocol / Pomodoro Widget -->
+      <section id="timer-widget" class="tactical-card timer-card">
+        <div class="card-bracket-tl"></div>
+        <div class="card-bracket-br"></div>
+        <div class="card-header-line">
+          <h2 id="timer-heading" class="card-title">
+            <span class="title-square">&#9632;</span> FOCUS TIMER
+          </h2>
+        </div>
+        <div class="timer-body">
+          <div id="timer-display" class="tactical-timer-display" role="timer">
+            <span id="timer-mins">25</span><span class="timer-colon">:</span><span id="timer-secs">00</span>
           </div>
-
-          <div class="timer-display-wrapper">
-            <div id="timer-display" class="timer-display" role="timer" aria-live="polite">25:00</div>
-            <!-- Segmented bar: 25 blocks -->
-            <div id="timer-segments" class="timer-segments" aria-hidden="true"></div>
+          <div id="timer-status-sub" class="timer-status-text">— STANDBY —</div>
+          <div id="timer-segments" class="segmented-progress"></div>
+          <div class="timer-elapsed-line">
+            <span>ELAPSED</span>
+            <span id="timer-elapsed-val" class="elapsed-val">00:00</span>
           </div>
-
-          <div class="timer-controls">
-            <button id="timer-start" class="btn btn-primary btn-lg" title="Start timer (Space)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-              </svg>
-              Start
-              <span class="kbd-hint" aria-hidden="true">Space</span>
-            </button>
-            <button id="timer-stop" class="btn btn-outline" title="Pause timer (Space)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <rect x="6" y="6" width="12" height="12" rx="2"></rect>
-              </svg>
-              Stop
-              <span class="kbd-hint" aria-hidden="true">Space</span>
-            </button>
-            <button id="timer-reset" class="btn btn-ghost">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="1 4 1 10 7 10"></polyline>
-                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-              </svg>
-              Reset
-            </button>
+          <div class="timer-btn-row">
+            <button id="timer-start" class="btn-tactical btn-start">START</button>
+            <button id="timer-stop" class="btn-tactical btn-stop">STOP</button>
+            <button id="timer-reset" class="btn-tactical btn-reset">RESET</button>
           </div>
+        </div>
+        <p id="timer-alert" class="tactical-alert alert-success" hidden></p>
+      </section>
 
-          <p id="timer-alert" class="alert alert-success" role="alert" hidden></p>
-        </section>
+      <!-- Quick Links / Navigation Widget (with Signature Orange Brackets) -->
+      <section id="links-widget" class="tactical-card links-card">
+        <div class="card-bracket-orange-tl"></div>
+        <div class="card-bracket-orange-br"></div>
+        <div class="card-header-line">
+          <h2 id="links-heading" class="card-title title-orange">
+            <span class="title-square-orange">&#9632;</span> QUICK LINKS / NAV
+          </h2>
+          <button id="add-link-btn" class="header-action-btn">+ ADD LINK</button>
+        </div>
+        <div class="links-content-body">
+          <div id="links-grid" class="tactical-links-grid"></div>
+          <div class="links-footer-note" id="links-footer-note">Links persist via Local Storage. Opens in new tab.</div>
+        </div>
+      </section>
+    </div>
 
-        <!-- Todo Widget -->
-        <section id="todo-widget" class="widget todo-widget" aria-labelledby="todo-heading">
-          <div class="widget-header">
-            <h2 id="todo-heading" class="widget-title"><span class="accent">⟐</span> Tasks</h2>
-            <span id="todo-count" class="badge" aria-label="Number of tasks">0</span>
-          </div>
-
-          <div class="todo-input-group">
-            <select id="todo-priority" class="priority-select" aria-label="Task priority">
-              <option value="low">LOW</option>
-              <option value="med" selected>MED</option>
-              <option value="high">HIGH</option>
-            </select>
-            <div class="input-wrapper">
-              <input
-                type="text"
-                id="todo-input"
-                class="input"
-                placeholder="New task, Operator..."
-                maxlength="200"
-                aria-label="New task text"
-                autocomplete="off"
-              >
-            </div>
-            <button id="todo-add" class="btn btn-primary" aria-label="Add task">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </button>
-          </div>
-
-          <div class="todo-controls">
-            <div class="select-wrapper">
-              <select id="todo-sort" class="select" aria-label="Sort tasks">
-                <option value="default">Default order</option>
-                <option value="priority">By priority</option>
-                <option value="alpha-asc">Alphabetical</option>
-                <option value="completed-last">Incomplete first</option>
-              </select>
-              <svg class="select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </div>
-          </div>
-
-          <ul id="todo-list" class="todo-list" aria-label="Task list"></ul>
-          <p id="todo-error" class="alert alert-error" role="alert" hidden></p>
-        </section>
+    <!-- Objectives / Tasks Section (Matching Image 2) -->
+    <section id="todo-widget" class="tactical-card tasks-card">
+      <div class="card-bracket-tl"></div>
+      <div class="card-bracket-br"></div>
+      <div class="card-header-line">
+        <h2 id="todo-heading" class="card-title">
+          <span class="title-square">&#9632;</span> MY TASKS
+        </h2>
+        <div class="tasks-header-actions">
+          <span id="tasks-progress-text" class="tasks-progress-label">1/5 complete</span>
+          <button id="tasks-purge-btn" class="purge-complete-btn">PURGE COMPLETE (1)</button>
+        </div>
       </div>
 
-      <!-- Quick Links Widget -->
-      <section id="links-widget" class="widget links-widget" aria-labelledby="links-heading">
-        <div class="widget-header">
-          <h2 id="links-heading" class="widget-title"><span class="accent">⟐</span> Quick Links</h2>
+      <!-- Add Task Input Bar -->
+      <div class="task-input-bar">
+        <div class="priority-segmented-switch" role="radiogroup" aria-label="Task priority">
+          <button type="button" class="priority-btn" data-priority="high">HIGH</button>
+          <button type="button" class="priority-btn active" data-priority="med">MED</button>
+          <button type="button" class="priority-btn" data-priority="low">LOW</button>
         </div>
-
-        <div class="links-input-group">
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="link-label-input"
-              class="input"
-              placeholder="Label (e.g., GitHub)"
-              maxlength="50"
-              aria-label="Link label"
-              autocomplete="off"
-            >
-          </div>
-          <div class="input-wrapper">
-            <input
-              type="url"
-              id="link-url-input"
-              class="input"
-              placeholder="URL (e.g., github.com)"
-              maxlength="2048"
-              aria-label="Link URL"
-              autocomplete="off"
-            >
-          </div>
-          <button id="link-add" class="btn btn-primary" aria-label="Add link">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            Add
-          </button>
+        <div class="task-input-field-wrap">
+          <input type="text" id="todo-input" class="tactical-input" placeholder="Add new objective..." maxlength="200" autocomplete="off">
         </div>
-
-        <div id="links-list" class="links-list" aria-label="Quick links list"></div>
-        <p id="links-error" class="alert alert-error" role="alert" hidden></p>
-      </section>
-    </main>
-
-    <!-- ============================================================
-         SETTINGS PANEL
-         ============================================================ -->
-    <aside id="settings-panel" class="settings-panel" aria-labelledby="settings-heading" aria-hidden="true">
-      <div class="settings-header">
-        <h2 id="settings-heading" class="widget-title" style="font-size: var(--font-size-lg);"><span class="accent">⟐</span> Settings</h2>
-        <button id="settings-close" class="icon-button" aria-label="Close settings">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
+        <button id="todo-add" class="btn-add-square" aria-label="Add objective">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
         </button>
       </div>
 
-      <div class="settings-content">
-        <div class="settings-section">
-          <label for="settings-name" class="settings-label">Operator Name</label>
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="settings-name"
-              class="input"
-              placeholder="Enter your codename"
-              maxlength="50"
-              aria-label="Operator name"
-              autocomplete="off"
-            >
+      <ul id="todo-list" class="tactical-task-list"></ul>
+      <p id="todo-error" class="tactical-alert alert-error" hidden></p>
+    </section>
+
+    <!-- Color Palette Accordion Reference (Matching Bottom of Image 2) -->
+    <div class="palette-accordion">
+      <button id="palette-toggle-btn" class="palette-toggle-btn" aria-expanded="false">
+        <span class="accordion-arrow">▶</span>
+        <span class="accordion-dots">• •</span>
+        <span id="palette-heading-text">COLOR PALETTE — CSS VARIABLES REFERENCE (DARK / NIGHT MODE)</span>
+      </button>
+      <div id="palette-content" class="palette-content" hidden>
+        <div class="palette-grid">
+          <div class="palette-swatch-item">
+            <div class="swatch-box" style="background:var(--bg-primary)"></div>
+            <div class="swatch-info"><span class="swatch-name">--bg-primary</span><span id="swatch-bg-primary" class="swatch-val">#050C16</span></div>
           </div>
-          <p id="settings-name-error" class="alert alert-error" role="alert" hidden></p>
-          <button id="settings-name-save" class="btn btn-primary btn-full">Save Codename</button>
-        </div>
-
-        <div class="settings-divider"></div>
-
-        <div class="settings-section">
-          <label class="settings-label">Alarm Sound</label>
-          <div class="input-wrapper">
-            <input
-              type="file"
-              id="settings-sound-input"
-              class="input"
-              accept="audio/mpeg,audio/*"
-              aria-label="Upload alarm sound (MP3)"
-            >
+          <div class="palette-swatch-item">
+            <div class="swatch-box" style="background:var(--bg-card)"></div>
+            <div class="swatch-info"><span class="swatch-name">--bg-card</span><span id="swatch-bg-card" class="swatch-val">#071220</span></div>
           </div>
-          <p id="settings-sound-status" class="settings-sound-status">No custom sound set.</p>
-          <div class="sound-controls">
-            <button id="settings-sound-preview" class="btn btn-outline btn-full" disabled aria-label="Preview alarm sound">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-              </svg>
-              Preview
-            </button>
-            <button id="settings-sound-remove" class="btn btn-ghost btn-full" disabled aria-label="Remove custom alarm sound">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-              Remove Sound
-            </button>
+          <div class="palette-swatch-item">
+            <div class="swatch-box" style="background:var(--cyan)"></div>
+            <div class="swatch-info"><span class="swatch-name">--cyan</span><span id="swatch-cyan" class="swatch-val">#00D4FF</span></div>
           </div>
-          <p id="settings-sound-error" class="alert alert-error" role="alert" hidden></p>
-        </div>
-
-        <div class="settings-divider"></div>
-
-        <div class="settings-section">
-          <label class="settings-label">Data Backup</label>
-          <p class="settings-sound-status">Export or restore all your tasks, links, and settings.</p>
-          <button id="data-export-btn" class="btn btn-outline btn-full">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Export Data
-          </button>
-          <input type="file" id="data-import-input" accept=".json" style="display:none" aria-label="Import backup JSON file">
-          <button id="data-import-btn" class="btn btn-ghost btn-full">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="17 8 12 3 7 8"></polyline>
-              <line x1="12" y1="3" x2="12" y2="15"></line>
-            </svg>
-            Import Data
-          </button>
-        </div>
-
-        <div class="settings-divider"></div>
-
-        <div class="settings-section">
-          <label for="settings-duration" class="settings-label">Focus Duration (min)</label>
-          <div class="input-wrapper">
-            <input
-              type="number"
-              id="settings-duration"
-              class="input"
-              min="1"
-              max="120"
-              step="1"
-              aria-label="Focus duration in minutes"
-            >
+          <div class="palette-swatch-item">
+            <div class="swatch-box" style="background:var(--orange)"></div>
+            <div class="swatch-info"><span class="swatch-name">--orange</span><span id="swatch-orange" class="swatch-val">#FF8C1A</span></div>
           </div>
-          <p id="settings-duration-error" class="alert alert-error" role="alert" hidden></p>
-          <button id="settings-duration-save" class="btn btn-primary btn-full">Save Duration</button>
+          <div class="palette-swatch-item">
+            <div class="swatch-box" style="background:var(--text-primary)"></div>
+            <div class="swatch-info"><span class="swatch-name">--text-primary</span><span id="swatch-text-primary" class="swatch-val">#E0EBF5</span></div>
+          </div>
+          <div class="palette-swatch-item">
+            <div class="swatch-box" style="background:var(--green)"></div>
+            <div class="swatch-info"><span class="swatch-name">--green</span><span id="swatch-green" class="swatch-val">#00E676</span></div>
+          </div>
         </div>
       </div>
-    </aside>
+    </div>
 
-    <!-- Overlay -->
-    <div id="settings-overlay" class="settings-overlay" hidden></div>
+    <!-- Alarm Protocol Section -->
+    <section class="tactical-card alarm-card">
+      <div class="card-bracket-tl"></div>
+      <div class="card-bracket-br"></div>
+      <div class="card-header-line">
+        <h2 id="alarm-heading" class="card-title">
+          <span class="title-square">&#9632;</span> ALARM SCHEDULE
+        </h2>
+        <button id="alarm-add-btn" class="header-action-btn">+ ADD ALARM</button>
+      </div>
+      <div id="alarm-list" class="alarm-list">
+        <div class="alarm-empty-state">
+          <span class="alarm-empty-icon">&#8856;</span>
+          <span>No alarms configured</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Bar -->
+    <footer class="app-footer">
+      <div class="footer-left">OUR TIME OPR TERMINAL V 0.9</div>
+      <div class="footer-right">SYS STATUS: ONLINE</div>
+    </footer>
   </div>
 
+  <!-- Add Link Modal -->
+  <div id="add-link-modal" class="tactical-modal-backdrop" hidden>
+    <div class="tactical-modal tactical-card" role="dialog" aria-modal="true" aria-labelledby="modal-link-heading">
+      <div class="card-bracket-orange-tl"></div>
+      <div class="card-bracket-orange-br"></div>
+      <div class="card-header-line">
+        <h3 id="modal-link-heading" class="card-title title-orange">
+          <span class="title-square-orange">&#9632;</span> ADD LINK
+        </h3>
+        <button id="modal-link-close" class="tactical-icon-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-form-body">
+        <div class="form-group">
+          <label for="modal-link-label" class="tactical-label">Label</label>
+          <input type="text" id="modal-link-label" class="tactical-input" placeholder="e.g. YouTube" maxlength="50">
+        </div>
+        <div class="form-group">
+          <label for="modal-link-url" class="tactical-label">URL</label>
+          <input type="url" id="modal-link-url" class="tactical-input" placeholder="https://..." maxlength="2048">
+        </div>
+        <p id="modal-link-error" class="tactical-alert alert-error" hidden></p>
+        <div class="modal-actions-row">
+          <button id="modal-link-cancel" class="btn-tactical btn-stop">CANCEL</button>
+          <button id="modal-link-save" class="btn-tactical btn-start">DEPLOY</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alarm Triggered Overlay Alert -->
+  <div id="alarm-overlay" class="alarm-overlay" hidden>
+    <div class="alarm-overlay-card tactical-card">
+      <div class="card-bracket-tl"></div>
+      <div class="card-bracket-br"></div>
+      <div class="alarm-overlay-pulse"></div>
+      <div class="alarm-overlay-label">ALARM TRIGGERED</div>
+      <div id="alarm-overlay-time" class="alarm-overlay-time">00:00</div>
+      <div id="alarm-overlay-text" class="alarm-overlay-text">—</div>
+      <div class="alarm-overlay-actions">
+        <button id="alarm-snooze-btn" class="btn-tactical btn-stop">SNOOZE (5 MIN)</button>
+        <button id="alarm-dismiss-btn" class="btn-tactical btn-start">DISMISS</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Alarm Modal -->
+  <div id="alarm-modal" class="tactical-modal-backdrop" hidden>
+    <div class="tactical-modal tactical-card" role="dialog" aria-modal="true" aria-labelledby="alarm-modal-title">
+      <div class="card-bracket-tl"></div>
+      <div class="card-bracket-br"></div>
+      <div class="card-header-line">
+        <h3 id="alarm-modal-title" class="card-title">
+          <span class="title-square">&#9632;</span> ADD ALARM
+        </h3>
+        <button id="alarm-modal-close" class="tactical-icon-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-form-body">
+        <div class="form-group">
+          <label for="alarm-time-input" class="tactical-label">Time (HH:MM)</label>
+          <input type="time" id="alarm-time-input" class="tactical-input">
+        </div>
+        <div class="form-group">
+          <label for="alarm-label-input" class="tactical-label">Label</label>
+          <input type="text" id="alarm-label-input" class="tactical-input" placeholder="e.g. Morning Alarm" maxlength="50">
+        </div>
+        <div class="form-group">
+          <label for="alarm-repeat-select" class="tactical-label">Repeat</label>
+          <select id="alarm-repeat-select" class="tactical-input">
+            <option value="once">Once</option>
+            <option value="daily">Daily</option>
+            <option value="weekdays">Weekdays</option>
+            <option value="weekends">Weekends</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="alarm-sound-select" class="tactical-label">Alarm Sound</label>
+          <select id="alarm-sound-select" class="tactical-input">
+            <option value="-1">Built-in Chime</option>
+          </select>
+        </div>
+        <p id="alarm-modal-error" class="tactical-alert alert-error" hidden></p>
+        <div class="modal-actions-row">
+          <button id="alarm-modal-cancel" class="btn-tactical btn-stop">CANCEL</button>
+          <button id="alarm-modal-save" class="btn-tactical btn-start">SAVE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Slide-in Panel -->
+  <aside id="settings-panel" class="settings-panel" aria-hidden="true">
+    <div class="settings-header">
+      <h2 id="settings-heading" class="card-title">
+        <span class="title-square">&#9632;</span> DASHBOARD SETTINGS
+      </h2>
+      <button id="settings-close" class="tactical-icon-btn" aria-label="Close settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="settings-content">
+      <div class="settings-section">
+        <label for="settings-name" class="tactical-label">Your Name</label>
+        <input type="text" id="settings-name" class="tactical-input" placeholder="User" maxlength="50" autocomplete="off">
+        <button id="settings-name-save" class="btn-tactical btn-start btn-full">SAVE CODENAME</button>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <div class="settings-section">
+        <label for="settings-duration" class="tactical-label">Focus Duration (min)</label>
+        <input type="number" id="settings-duration" class="tactical-input" min="1" max="120" value="25">
+        <button id="settings-duration-save" class="btn-tactical btn-start btn-full">UPDATE DURATION</button>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <div class="settings-section">
+        <label class="tactical-label">Alarm Sounds Library</label>
+        <p class="settings-sound-status" id="settings-sound-status">No sounds uploaded yet.</p>
+        <input type="file" id="settings-sound-input" class="bounce-upload-input" accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg" multiple>
+        <button id="settings-sound-upload-btn" class="btn-tactical btn-start btn-full">+ ADD SOUND FILE</button>
+        <p class="settings-sound-status" style="margin-top:0.35rem">MP3 / WAV / OGG - Max 5 MB each - Max 5 sounds</p>
+        <div id="sound-library-list" class="sound-library-list"></div>
+        <div class="alarm-sound-source">
+          <div class="scan-settings-row">
+            <label class="toggle-switch">
+              <input type="checkbox" id="alarm-use-custom-sound" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="settings-subtext">Use uploaded sounds for alarms (fall back to built-in chime)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <div class="settings-section">
+        <label class="tactical-label">Bounce Images</label>
+        <div class="bounce-toggle-section">
+          <div class="scan-settings-row">
+            <label class="toggle-switch">
+              <input type="checkbox" id="bounce-enabled-check" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="settings-subtext">Show bouncing background images</span>
+          </div>
+        </div>
+        <div class="bounce-speed-row">
+          <label>SPEED</label>
+          <input type="range" id="bounce-speed-slider" min="1" max="20" value="4" step="0.5">
+          <span id="bounce-speed-val" class="settings-sound-status">4s</span>
+        </div>
+        <div class="bounce-size-row">
+          <label>SIZE</label>
+          <input type="range" id="bounce-size-slider" min="30" max="200" value="100" step="10">
+          <span id="bounce-size-val" class="settings-sound-status">100px</span>
+        </div>
+        <p class="bounce-count-label" id="bounce-count-label">0 / 5 images loaded</p>
+        <div class="bounce-thumb-grid" id="bounce-thumb-grid">
+          <div class="bounce-thumb-slot"><span class="bounce-thumb-empty">+</span></div>
+          <div class="bounce-thumb-slot"><span class="bounce-thumb-empty">+</span></div>
+          <div class="bounce-thumb-slot"><span class="bounce-thumb-empty">+</span></div>
+          <div class="bounce-thumb-slot"><span class="bounce-thumb-empty">+</span></div>
+          <div class="bounce-thumb-slot"><span class="bounce-thumb-empty">+</span></div>
+        </div>
+        <input type="file" id="bounce-upload-input" class="bounce-upload-input" accept="image/jpeg,image/jpg,image/png" multiple>
+        <button id="bounce-upload-btn" class="btn-tactical btn-start btn-full" style="margin-top:0.5rem">+ ADD IMAGE</button>
+        <p class="settings-sound-status" style="margin-top:0.35rem">JPEG / PNG only &middot; Max 2 MB per file &middot; Max 5 images</p>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <div class="settings-section">
+        <label class="tactical-label">Theme Customizer</label>
+        <div class="theme-presets-grid">
+          <button class="theme-preset-btn active" data-preset="default-dark">
+            <span class="preset-swatch" style="background:linear-gradient(135deg,#050C16 50%,#00D4FF 50%)"></span>
+            <span class="preset-label">DARK</span>
+          </button>
+          <button class="theme-preset-btn" data-preset="default-light">
+            <span class="preset-swatch" style="background:linear-gradient(135deg,#EEF2F6 50%,#009DD9 50%)"></span>
+            <span class="preset-label">LIGHT</span>
+          </button>
+          <button class="theme-preset-btn" data-preset="midnight">
+            <span class="preset-swatch" style="background:linear-gradient(135deg,#0A0A1A 50%,#7C3AED 50%)"></span>
+            <span class="preset-label">MIDNIGHT</span>
+          </button>
+          <button class="theme-preset-btn" data-preset="high-contrast">
+            <span class="preset-swatch" style="background:linear-gradient(135deg,#000 50%,#FF0 50%)"></span>
+            <span class="preset-label">CONTRAST</span>
+          </button>
+          <button class="theme-preset-btn" data-preset="nord">
+            <span class="preset-swatch" style="background:linear-gradient(135deg,#2E3440 50%,#88C0D0 50%)"></span>
+            <span class="preset-label">NORD</span>
+          </button>
+          <button class="theme-preset-btn" data-preset="sunset">
+            <span class="preset-swatch" style="background:linear-gradient(135deg,#1A0A2E 50%,#FF6B6B 50%)"></span>
+            <span class="preset-label">SUNSET</span>
+          </button>
+        </div>
+        <div class="color-pickers-grid">
+          <div class="color-pick-item"><label>Background</label><input type="color" data-var="--bg-primary" value="#050C16"></div>
+          <div class="color-pick-item"><label>Surface</label><input type="color" data-var="--bg-card" value="#071220"></div>
+          <div class="color-pick-item"><label>Text</label><input type="color" data-var="--text-primary" value="#E0EBF5"></div>
+          <div class="color-pick-item"><label>Primary</label><input type="color" data-var="--cyan" value="#00D4FF"></div>
+          <div class="color-pick-item"><label>Accent</label><input type="color" data-var="--orange" value="#FF8C1A"></div>
+          <div class="color-pick-item"><label>Bounce</label><input type="color" data-var="--bounce-glow" value="#00D4FF"></div>
+        </div>
+        <button id="theme-reset-btn" class="btn-tactical btn-reset btn-full">RESET THEME</button>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <div class="settings-section">
+        <label class="tactical-label">Data Backup</label>
+        <button id="data-export-btn" class="btn-tactical btn-stop btn-full">EXPORT DATA</button>
+        <input type="file" id="data-import-input" accept=".json" style="display:none">
+        <button id="data-import-btn" class="btn-tactical btn-reset btn-full">IMPORT DATA</button>
+      </div>
+    </div>
+  </aside>
+
+  <div id="settings-overlay" class="settings-overlay" hidden></div>
   <script src="js/app.js" defer></script>
 </body>
 </html>
