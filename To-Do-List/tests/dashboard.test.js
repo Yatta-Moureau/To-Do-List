@@ -157,4 +157,56 @@ describe('Dashboard DOM & UI Initial State (Empty Defaults & 20min Focus)', () =
     const dashes = window.document.querySelectorAll('.segmented-dash');
     expect(dashes.length).toBe(25);
   });
+
+describe('Security & URL Validation', () => {
+  test('isValidUrl returns true for valid http/https URLs', () => {
+    expect(_testExports.isValidUrl('https://example.com')).toBe(true);
+    expect(_testExports.isValidUrl('http://google.com')).toBe(true);
+    expect(_testExports.isValidUrl('https://sub.domain.co/path?q=1')).toBe(true);
+  });
+
+  test('isValidUrl returns false for invalid or dangerous URLs', () => {
+    expect(_testExports.isValidUrl('')).toBe(false);
+    expect(_testExports.isValidUrl(null)).toBe(false);
+    expect(_testExports.isValidUrl('ftp://files.com')).toBe(false);
+    expect(_testExports.isValidUrl('javascript:alert(1)')).toBe(false);
+  });
+
+  test('normalizeUrl blocks javascript, data, and vbscript schemes', () => {
+    expect(_testExports.normalizeUrl('javascript:alert(1)')).toBe('');
+    expect(_testExports.normalizeUrl('data:text/html,<script>alert(1)</script>')).toBe('');
+    expect(_testExports.normalizeUrl('vbscript:MsgBox(1)')).toBe('');
+    expect(_testExports.normalizeUrl('JAVASCRIPT:void(0)')).toBe('');
+  });
+});
+
+describe('Bounce Image File Validation', () => {
+  test('validateBounceFile accepts valid JPEG files', () => {
+    const file = new File(['data'], 'photo.jpg', { type: 'image/jpeg' });
+    Object.defineProperty(file, 'size', { value: 1024 * 500 });
+    const result = _testExports.validateBounceFile(file);
+    expect(result.ok).toBe(true);
+  });
+
+  test('validateBounceFile accepts valid PNG files', () => {
+    const file = new File(['data'], 'image.png', { type: 'image/png' });
+    Object.defineProperty(file, 'size', { value: 1024 * 300 });
+    const result = _testExports.validateBounceFile(file);
+    expect(result.ok).toBe(true);
+  });
+
+  test('validateBounceFile rejects non-image files', () => {
+    const file = new File(['data'], 'script.html', { type: 'text/html' });
+    Object.defineProperty(file, 'size', { value: 1024 });
+    const result = _testExports.validateBounceFile(file);
+    expect(result.ok).toBe(false);
+  });
+
+  test('validateBounceFile rejects files exceeding max size', () => {
+    const file = new File(['data'], 'huge.jpg', { type: 'image/jpeg' });
+    Object.defineProperty(file, 'size', { value: 5 * 1024 * 1024 });
+    const result = _testExports.validateBounceFile(file);
+    expect(result.ok).toBe(false);
+  });
+});
 });

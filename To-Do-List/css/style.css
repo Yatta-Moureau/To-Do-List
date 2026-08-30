@@ -72,6 +72,326 @@
   --ease-tactical:      cubic-bezier(0.16, 1, 0.3, 1);
   --t-fast:             150ms var(--ease-tactical);
   --t-normal:           250ms var(--ease-tactical);
+
+    /* Spacing Scale */
+    --space-0:             0;
+    --space-1:             0.25rem;
+    --space-2:             0.5rem;
+    --space-3:             0.75rem;
+    --space-4:             1rem;
+    --space-5:             1.25rem;
+    --space-6:             1.5rem;
+    --space-8:             2rem;
+    --space-10:            2.5rem;
+    --space-12:            3rem;
+    --space-16:            4rem;
+    --space-20:            5rem;
+
+    /* Font Sizes */
+    --font-size-xs:        0.625rem;
+    --font-size-sm:        0.75rem;
+    --font-size-base:      0.875rem;
+    --font-size-md:        0.95rem;
+    --font-size-lg:        1.15rem;
+    --font-size-xl:        1.35rem;
+    --font-size-2xl:       2.2rem;
+    --font-size-3xl:       3.5rem;
+    --font-size-4xl:       4.6rem;
+
+    /* Line Heights */
+    --line-height-tight:   1.1;
+    --line-height-normal:  1.5;
+    --line-height-relaxed: 1.75;
+
+    /* Font Weights */
+    --font-weight-medium:  500;
+    --font-weight-semibold: 600;
+    --font-weight-bold:    700;
+
+    /* Letter Spacing */
+    --tracking-tight:      0.04em;
+    --tracking-normal:     0.08em;
+    --tracking-wide:       0.12em;
+    --tracking-wider:      0.14em;
+    --tracking-widest:     0.16em;
+
+    /* Border Radii */
+    --radius-none:         0;
+    --radius-sm:           1px;
+    --radius-md:           2px;
+    --radius-lg:           4px;
+    --radius-xl:           8px;
+    --radius-full:         9999px;
+
+    /* Border Widths */
+    --border-width-thin:   1px;
+    --border-width-normal: 2px;
+    --border-width-thick:  3px;
+
+    /* Z-Index Scale */
+    --z-base:              0;
+    --z-content:           1;
+    --z-overlay:           10;
+    --z-modal:             100;
+    --z-toast:             200;
+    --z-tooltip:           300;
+
+    /* Bounce Image Properties */
+    --bounce-glow:         #00D4FF;
+    --bounce-opacity:      1;
+    --bounce-size:         100px;
+
+    /* Breakpoint Reference */
+    --bp-sm:               480px;
+    --bp-md:               768px;
+    --bp-lg:               1024px;
+    --bp-xl:               1280px;
+    --bp-2xl:              2560px;
+
+    /* Layout */
+    --max-width:           1180px;
+    --header-height:       auto;
+    --card-padding:        1.25rem 1.5rem;
+    --card-padding-lg:     1.5rem 1.75rem;
+    --grid-gap:            1.25rem;
+    --section-gap:         1.25rem;
+
+    /* Transition Durations */
+    --duration-fast:       150ms;
+    --duration-normal:     250ms;
+    --duration-slow:       400ms;
+    --duration-slower:     600ms;
+
+    /* Transition Easings */
+    --ease-default:        cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in:             cubic-bezier(0.4, 0, 1, 1);
+    --ease-out:            cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out:         cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-spring:         cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* Colors Extended */
+    --cyan-light:          rgba(0, 212, 255, 0.06);
+    --cyan-medium:         rgba(0, 212, 255, 0.15);
+    --orange-light:        rgba(255, 140, 26, 0.06);
+    --orange-medium:       rgba(255, 140, 26, 0.15);
+    --green-light:         rgba(0, 230, 118, 0.06);
+    --danger-light:        rgba(255, 82, 82, 0.06);
+
+    /* Shadows Extended */
+    --shadow-sm:           0 1px 3px rgba(0, 0, 0, 0.12);
+    --shadow-md:           0 4px 12px rgba(0, 0, 0, 0.25);
+    --shadow-lg:           0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-xl:           0 16px 48px rgba(0, 0, 0, 0.6);
+    --shadow-inner:        inset 0 2px 6px rgba(0, 0, 0, 0.15);
+    --shadow-cyan-glow:    0 0 20px rgba(0, 212, 255, 0.3);
+    --shadow-orange-glow:  0 0 20px rgba(255, 140, 26, 0.3);
+
+    /* Status Colors */
+    --status-online:       var(--green);
+    --status-warning:      var(--orange);
+    --status-danger:       var(--danger);
+    --status-info:         var(--cyan);
+
+    /* Timer Specific */
+    --timer-font-size:     var(--font-size-4xl);
+    --timer-colon-color:   var(--cyan);
+    --timer-running-color: var(--cyan);
+    --timer-paused-color:  var(--orange);
+
+    /* Priority Extended */
+    --priority-high-bg:    var(--orange-dim);
+    --priority-med-bg:     var(--cyan-dim);
+    --priority-low-bg:     rgba(127, 154, 181, 0.12);
+
+    /* Badge */
+    --badge-active-bg:     rgba(0, 230, 118, 0.08);
+    --badge-pending-bg:    rgba(255, 140, 26, 0.08);
+    --badge-active-text:   var(--green);
+    --badge-pending-text:  var(--orange);
+
+    /* Scrollbar */
+    --scrollbar-track:     var(--bg-secondary);
+    --scrollbar-thumb:     var(--border-color);
+    --scrollbar-thumb-hover: var(--cyan);
+
+    /* Focus Ring */
+    --focus-ring-color:    var(--cyan);
+    --focus-ring-width:    2px;
+    --focus-ring-offset:   2px;
+
+    /* Input */
+    --input-bg:            var(--bg-input);
+    --input-border:        var(--border-color);
+    --input-focus-border:  var(--cyan);
+    --input-placeholder:   var(--text-muted);
+
+    /* Modal */
+    --modal-backdrop:      rgba(0, 0, 0, 0.6);
+    --modal-max-width:     480px;
+
+    /* Settings Panel */
+    --panel-width:         380px;
+    --panel-bg:            var(--bg-card);
+
+    /* Toast */
+    --toast-max-width:     400px;
+    --toast-success:       var(--green);
+    --toast-error:         var(--danger);
+    --toast-info:          var(--cyan);
+    --toast-warning:       var(--orange);
+
+
+    /* Light Theme Extended Colors */
+    --bg-elevated:         #FFFFFF;
+    --bg-overlay:          rgba(238, 242, 246, 0.95);
+    --bg-interactive:      rgba(0, 157, 217, 0.08);
+    --border-glow:         rgba(0, 157, 217, 0.2);
+    --text-link:           #0077B6;
+    --text-link-hover:     #005F99;
+    --code-bg:             #F1F5F9;
+    --code-text:           #1E3A5F;
+    --success-soft:        rgba(16, 185, 129, 0.12);
+    --warning-soft:        rgba(255, 122, 0, 0.12);
+    --danger-soft:         rgba(239, 68, 68, 0.12);
+    --info-soft:           rgba(0, 157, 217, 0.12);
+    --nav-bg:              #FFFFFF;
+    --nav-border:          rgba(13, 27, 42, 0.08);
+    --tag-bg:              rgba(0, 157, 217, 0.1);
+    --tag-text:            #0077B6;
+    --tooltip-bg:          #0D1B2A;
+    --tooltip-text:        #E0EBF5;
+    --divider:             rgba(13, 27, 42, 0.08);
+    --avatar-border:       rgba(0, 157, 217, 0.3);
+    --avatar-glow:         rgba(0, 157, 217, 0.15);
+    --highlight:           rgba(0, 157, 217, 0.15);
+    --selection-bg:        rgba(0, 157, 217, 0.2);
+    --selection-text:      #0D1B2A;
+    --calendar-today:      var(--cyan);
+    --calendar-today-bg:   rgba(0, 157, 217, 0.08);
+    --progress-bg:         rgba(0, 157, 217, 0.12);
+    --progress-fill:       var(--cyan);
+    --tab-active:          var(--cyan);
+    --tab-inactive:        var(--text-muted);
+    --table-header:        #E2E8F0;
+    --table-stripe:        rgba(0, 157, 217, 0.03);
+    --table-hover:         rgba(0, 157, 217, 0.05);
+    --chip-bg:             rgba(0, 157, 217, 0.08);
+    --chip-text:           #0077B6;
+    --chip-border:         rgba(0, 157, 217, 0.2);
+    --breadcrumb-text:     #778DA9;
+    --breadcrumb-active:   #0D1B2A;
+    --skeleton-base:       rgba(0, 157, 217, 0.06);
+    --skeleton-shine:      rgba(0, 157, 217, 0.12);
+    --dropdown-bg:         #FFFFFF;
+    --dropdown-hover:      rgba(0, 157, 217, 0.06);
+    --dropdown-border:     rgba(13, 27, 42, 0.12);
+    --fab-bg:              var(--cyan);
+    --fab-text:            #FFFFFF;
+    --fab-hover:           #0077B6;
+    --sidebar-bg:          #F1F5F9;
+    --sidebar-width:       240px;
+    --divider-vertical:    rgba(13, 27, 42, 0.1);
+    --handle-color:        var(--cyan);
+    --mask-color:          rgba(255, 255, 255, 0.8);
+    --accent-tertiary:     #6D28D9;
+    --accent-quaternary:   #DC2626;
+
+
+    /* Animation Keyframe Tokens */
+    --anim-fade-in:        fadeIn 0.3s ease;
+    --anim-slide-up:       slideUp 0.4s var(--ease-tactical);
+    --anim-slide-right:    slideRight 0.3s var(--ease-tactical);
+    --anim-pulse:          pulse 2s ease-in-out infinite;
+    --anim-glow:           glow 2s ease-in-out infinite;
+    --anim-spin:           spin 1s linear infinite;
+    --anim-bounce:         bounce 0.5s ease;
+    --anim-shake:          shake 0.3s ease;
+    --anim-scale-in:       scaleIn 0.2s var(--ease-tactical);
+    --anim-fade-out:       fadeOut 0.3s ease forwards;
+
+    /* Card Variant Tokens */
+    --card-banner-padding: var(--card-padding-lg);
+    --card-timer-padding:  var(--card-padding);
+    --card-links-padding:  var(--card-padding);
+    --card-tasks-padding:  var(--card-padding);
+    --card-alarm-padding:  var(--card-padding);
+
+    /* Greeting */
+    --greeting-font-size:  var(--font-size-2xl);
+    --greeting-color:      #FFFFFF;
+    --greeting-meta-font:  var(--font-size-sm);
+
+    /* Accent Bar */
+    --accent-bar-width:    220px;
+    --accent-bar-height:   2.5px;
+
+    /* Timer Segments */
+    --segment-count:       25;
+    --segment-gap:         3px;
+    --segment-height:      4px;
+
+    /* Bounce Trail */
+    --trail-max-particles: 120;
+    --trail-life:          2s;
+    --trail-min-size:      1px;
+    --trail-max-size:      3px;
+
+    /* Bounce Physics */
+    --bounce-base-speed:   10px;
+    --bounce-wobble-amp:   6px;
+    --bounce-rotation-min: 3deg;
+    --bounce-rotation-max: 7deg;
+    --bounce-squash-min:   0.7;
+    --bounce-squash-max:   1.25;
+
+    /* Sound */
+    --sfx-volume:          0.05;
+    --alarm-volume:        0.2;
+    --chime-frequency-1:   523.25;
+    --chime-frequency-2:   659.25;
+    --chime-frequency-3:   783.99;
+    --chime-frequency-4:   1046.50;
+
+    /* Alarm Overlay */
+    --alarm-pulse-speed:   1.5s;
+    --alarm-overlay-bg:    rgba(5, 12, 22, 0.95);
+
+    /* Settings Panel */
+    --settings-slide-speed: 0.3s;
+    --settings-section-gap: var(--space-6);
+
+    /* Sound Library */
+    --sound-item-height:   auto;
+    --sound-item-padding:  0.5rem 0.75rem;
+    --sound-name-color:    var(--cyan);
+
+    /* Theme Customizer */
+    --preset-swatch-size:  32px;
+    --picker-input-size:   28px;
+
+    /* Profile Photo */
+    --photo-size:          36px;
+    --photo-border-width:  2px;
+    --photo-glow-spread:   8px;
+
+    /* Import/Export */
+    --backup-file-type:    application/json;
+    --backup-max-size:     1024 * 1024;
+
+    /* Responsive */
+    --container-padding-sm: 1rem;
+    --container-padding-md: 1.5rem;
+    --container-padding-lg: 2rem;
+    --grid-columns:        2;
+    --grid-columns-single: 1;
+
+    /* Clear View */
+    --clear-transition:    0.3s ease;
+
+    /* Print */
+    --print-bg:            #FFFFFF;
+    --print-text:          #000000;
+
 }
 
 /* ============================================================
@@ -127,6 +447,62 @@
 
   /* Scan Line */
   --scan-color:         #00D4FF;
+
+    /* Extended Dark Theme Colors */
+    --bg-elevated:         #0B1C32;
+    --bg-overlay:          rgba(5, 12, 22, 0.92);
+    --bg-interactive:      rgba(0, 212, 255, 0.08);
+    --border-glow:         rgba(0, 212, 255, 0.3);
+    --text-link:           #00D4FF;
+    --text-link-hover:     #4DE8FF;
+    --code-bg:             #0A1420;
+    --code-text:           #88C0D0;
+    --success-soft:        rgba(0, 230, 118, 0.15);
+    --warning-soft:        rgba(255, 140, 26, 0.15);
+    --danger-soft:         rgba(255, 82, 82, 0.15);
+    --info-soft:           rgba(0, 212, 255, 0.15);
+    --nav-bg:              rgba(7, 18, 32, 0.85);
+    --nav-border:          rgba(0, 212, 255, 0.14);
+    --tag-bg:              rgba(0, 212, 255, 0.1);
+    --tag-text:            #00D4FF;
+    --tooltip-bg:          #071220;
+    --tooltip-text:        #E0EBF5;
+    --divider:             rgba(0, 212, 255, 0.12);
+    --avatar-border:       rgba(0, 212, 255, 0.3);
+    --avatar-glow:         rgba(0, 212, 255, 0.2);
+    --highlight:           rgba(0, 212, 255, 0.2);
+    --selection-bg:        rgba(0, 212, 255, 0.3);
+    --selection-text:      #FFFFFF;
+    --calendar-today:      var(--cyan);
+    --calendar-today-bg:   rgba(0, 212, 255, 0.1);
+    --progress-bg:         rgba(0, 212, 255, 0.12);
+    --progress-fill:       var(--cyan);
+    --tab-active:          var(--cyan);
+    --tab-inactive:        var(--text-muted);
+    --table-header:        #091526;
+    --table-stripe:        rgba(0, 212, 255, 0.03);
+    --table-hover:         rgba(0, 212, 255, 0.06);
+    --chip-bg:             rgba(0, 212, 255, 0.08);
+    --chip-text:           #00D4FF;
+    --chip-border:         rgba(0, 212, 255, 0.2);
+    --breadcrumb-text:     #7F9AB5;
+    --breadcrumb-active:   #E0EBF5;
+    --skeleton-base:       rgba(0, 212, 255, 0.06);
+    --skeleton-shine:      rgba(0, 212, 255, 0.12);
+    --dropdown-bg:         #071220;
+    --dropdown-hover:      rgba(0, 212, 255, 0.08);
+    --dropdown-border:     rgba(0, 212, 255, 0.2);
+    --fab-bg:              var(--cyan);
+    --fab-text:            #040913;
+    --fab-hover:           #4DE8FF;
+    --sidebar-bg:          #050E1A;
+    --sidebar-width:       240px;
+    --divider-vertical:    rgba(0, 212, 255, 0.1);
+    --handle-color:        var(--cyan);
+    --mask-color:          rgba(5, 12, 22, 0.8);
+    --accent-tertiary:     #7C3AED;
+    --accent-quaternary:   #FF6B6B;
+
 }
 
 /* ============================================================
@@ -1742,7 +2118,7 @@ body {
 /* ============================================================
    BOUNCE IMAGES — Floating Animated Background Images
    ============================================================ */
-.bounce-images-container {
+.bounce-images-container { contain: layout style;
   position: fixed;
   inset: 0;
   z-index: 0;
@@ -2104,4 +2480,16 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ---- PWA Install Button ---- */
+.pwa-install-btn[hidden] {
+    display: none !important;
+}
+.pwa-install-btn:not([hidden]) {
+    animation: pwa-pulse 2s ease-in-out infinite;
+}
+@keyframes pwa-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+    50% { box-shadow: 0 0 8px 3px rgba(0, 212, 255, 0.3); }
 }

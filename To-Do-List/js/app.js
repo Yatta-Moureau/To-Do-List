@@ -6,10 +6,11 @@
 (function () {
   'use strict';
 
-  /* ============================================================
-     StorageService — localStorage abstraction with fallbacks
-     ============================================================ */
-  var StorageService = Object.freeze({
+  /**
+ * @module StorageService
+ * @description localStorage abstraction with try/catch fallbacks.
+ */
+var StorageService = Object.freeze({
     KEY_THEME:             'pd_theme',
     KEY_NAME:              'pd_user_name',
     KEY_POMODORO_DURATION: 'pd_pomodoro_duration',
@@ -53,9 +54,11 @@
     }
   });
 
-  /* ============================================================
-     Utility Helper Functions
-     ============================================================ */
+/**
+ * @module UtilityHelpers
+ * @description Pure helper functions for date formatting, greeting text,
+ *              URL normalization, and efficiency calculations.
+ */
   function pad2(n) {
     return String(n).padStart(2, '0');
   }
@@ -125,10 +128,11 @@
     return Math.round((done / total) * 100);
   }
 
-  /* ============================================================
-     SFXModule — Web Audio API Synthesizer
-     ============================================================ */
-  var SFXModule = (function () {
+  /**
+ * @module SFXModule
+ * @description Web Audio API synthesizer for interaction sounds.
+ */
+var SFXModule = (function () {
     var ctx = null;
     var enabled = true;
 
@@ -227,10 +231,11 @@
     };
   }());
 
-  /* ============================================================
-     AlarmAudio — Alarm Sound Generator & Player
-     ============================================================ */
-  var AlarmAudio = (function () {
+  /**
+ * @module AlarmAudio
+ * @description Built-in alarm sound generator using sawtooth waves.
+ */
+var AlarmAudio = (function () {
     var ctx = null;
     var repeatTimer = null;
 
@@ -286,10 +291,11 @@
     };
   }());
 
-    /* ============================================================
-     SoundModule - Multi-Sound Library
-     ============================================================ */
-  var SoundModule = (function () {
+    /**
+ * @module SoundModule
+ * @description Multi-sound alarm library with upload/play/rename.
+ */
+var SoundModule = (function () {
     var KEY_SOUNDS = 'pd_sound_library';
     var MAX_SOUNDS = 5;
     var MAX_SOUND_SIZE = 5 * 1024 * 1024;
@@ -481,10 +487,11 @@
       }
     };
   }());
-/* ============================================================
-     ThemeModule — Dark / Light Theme Switcher
-     ============================================================ */
-  var ThemeModule = (function () {
+/**
+ * @module ThemeModule
+ * @description Dark/light theme switcher with custom theme cleanup.
+ */
+var ThemeModule = (function () {
     function applyTheme(theme) {
       var normalised = (theme === 'light') ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', normalised);
@@ -532,10 +539,11 @@
     };
   }());
 
-  /* ============================================================
-     Greeting & Banner Module — Live System Clock & Status
-     ============================================================ */
-  var GreetingModule = (function () {
+  /**
+ * @module GreetingModule
+ * @description Live clock, greeting, and banner statistics.
+ */
+var GreetingModule = (function () {
     var timerId = null;
 
     function renderClock() {
@@ -622,10 +630,11 @@
     };
   }());
 
-  /* ============================================================
-     TimerModule — Focus Timer (Pomodoro)
-     ============================================================ */
-  var TimerModule = (function () {
+  /**
+ * @module TimerModule
+ * @description Pomodoro timer (1-120 min) with segmented progress.
+ */
+var TimerModule = (function () {
     var TOTAL_SEGMENTS = 25;
 
     var state = {
@@ -826,10 +835,11 @@
     };
   }());
 
-  /* ============================================================
-     TodoModule — Objectives / Tasks Management with Initial Seed
-     ============================================================ */
-  var TodoModule = (function () {
+  /**
+ * @module TodoModule
+ * @description Task CRUD with priority system (HIGH/MED/LOW).
+ */
+var TodoModule = (function () {
     var tasks = [];
     var activePriority = 'med';
     var editingId = null;
@@ -1072,10 +1082,11 @@
     };
   }());
 
-  /* ============================================================
-     LinksModule — Quick Links Navigation with Initial Seed
-     ============================================================ */
-  var LinksModule = (function () {
+  /**
+ * @module LinksModule
+ * @description Quick links with modal add/remove interface.
+ */
+var LinksModule = (function () {
     var links = [];
 
     var DEFAULT_LINKS = [];
@@ -1235,10 +1246,11 @@
     };
   }());
 
-  /* ============================================================
-     AlarmSystem & AlarmUI — Alarm Scheduling & Trigger
-     ============================================================ */
-  var AlarmSystem = (function () {
+  /**
+ * @module AlarmSystem
+ * @description Alarm scheduling with repeat logic and trigger detection.
+ */
+var AlarmSystem = (function () {
     var alarms = [];
     var triggerCallback = null;
 
@@ -1326,6 +1338,16 @@
       onTrigger: function (fn) { triggerCallback = fn; }
     };
   }());
+
+/**
+
+ * @module AlarmUI
+
+ * @description Alarm list rendering, trigger overlay, snooze/dismiss UI.
+
+ *              Coordinates with SoundModule for alarm audio playback.
+
+ */
 
   var AlarmUI = (function () {
     var activeAlarm = null;
@@ -1506,10 +1528,11 @@
     };
   }());
 
-  /* ============================================================
-     SettingsModule — Terminal Configuration, Sound & Data Backup
-     ============================================================ */
-  var SettingsModule = (function () {
+  /**
+ * @module SettingsModule
+ * @description Settings panel with data backup/restore.
+ */
+var SettingsModule = (function () {
     var isOpen = false;
 
     function openPanel() {
@@ -1645,8 +1668,11 @@
     };
   }());
 
-    /* BounceImages - Floating Animated Background Images, IndexedDB-backed, JPEG-only, max 5 */
-  var BounceImages = (function () {
+    /**
+ * @module BounceImages
+ * @description Floating image animation with particle trails.
+ */
+var BounceImages = (function () {
     var DB_NAME = 'OurTimeBounceDB';
     var DB_VERSION = 1;
     var STORE_NAME = 'images';
@@ -1655,14 +1681,14 @@
     var ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
     var ALLOWED_EXT = ['.jpg', '.jpeg', '.png'];
     var db = null; var enabled = true; var speed = 4; var imageSize = 100; var images = [];
-    var container = null; var imgElements = []; var animFrames = []; var paused = false;
+    var container = null; var imgElements = []; var animFrames = []; var paused = false; var animFrameId = 0; var frameCount = 0;
     var canvas = null, ctx = null;
     var particles = [];
-    var MAX_PARTICLES = 120;
+    var MAX_PARTICLES = 40;
     var PARTICLE_SPAWN_RATE = 1; // fewer particles per bouncer per frame
-    var PARTICLE_LIFE = 2.0; // longer life, more ash-like fade
+    var PARTICLE_LIFE = 1.2; // longer life, more ash-like fade
     var PARTICLE_SIZE_MIN = 1;
-    var PARTICLE_SIZE_MAX = 3;
+    var PARTICLE_SIZE_MAX = 2;
 
     function validateFile(file) {
       if (!file || typeof file.name !== 'string') return { ok: false, reason: 'Invalid file' };
@@ -1828,13 +1854,14 @@
     function animate(timestamp) {
       if (paused) {
         lastTime = 0;
-        animFrames.forEach(function (id) { cancelAnimationFrame(id); });
-        animFrames = [];
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        animFrameId = 0;
         return;
       }
       if (!lastTime) lastTime = timestamp;
       var dt = Math.min((timestamp - lastTime) / 1000, 0.1);
       lastTime = timestamp;
+      frameCount++;
       var w = window.innerWidth;
       var h = window.innerHeight;
       var factor = 160 / speed;
@@ -1865,7 +1892,7 @@
 
         // Apply velocity with wobble and easing
         b.x += (b.vx * easeMult + wobbleX) * dt * bf;
-        spawnParticle(b.x, b.y, b);
+        if (frameCount % 3 === 0) spawnParticle(b.x, b.y, b);
         b.y += (b.vy * easeMult + wobbleY) * dt * bf;
 
         // Rotation with per-bouncer variance
@@ -1914,7 +1941,7 @@
       });
       updateParticles(dt);
       renderParticles();
-      animFrames.push(requestAnimationFrame(animate));
+      animFrameId = requestAnimationFrame(animate);
     }
 
     function renderThumbnails() {
@@ -1955,8 +1982,8 @@
       bouncers = [];
       particles = [];
       if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-      animFrames.forEach(function (id) { cancelAnimationFrame(id); });
-      animFrames = [];
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      animFrameId = 0;
       lastTime = 0;
       if (!enabled || images.length === 0) {
         container.hidden = true;
@@ -1978,7 +2005,7 @@
         initBouncer(i, imgEl, w, h);
       });
       if (images.length > 0) {
-        animFrames.push(requestAnimationFrame(animate));
+        animFrameId = requestAnimationFrame(animate);
       }
     }
 
@@ -2177,10 +2204,11 @@ url) URL.revokeObjectURL(imgData.url);
 
 
 
-  /* ============================================================
-     ThemeCustomizer — Color Presets & Real-Time CSS Variable Sync
-     ============================================================ */
-  var ThemeCustomizer = (function () {
+  /**
+ * @module ThemeCustomizer
+ * @description 6 presets + 6 custom color pickers.
+ */
+var ThemeCustomizer = (function () {
     var PRESETS = {
       'default-dark': {
         '--bg-primary': '#050C16',
@@ -2303,10 +2331,11 @@ url) URL.revokeObjectURL(imgData.url);
     };
   }());
 
-  /* ============================================================
-     ToastModule — HUD Alerts
-     ============================================================ */
-  var ToastModule = (function () {
+  /**
+ * @module ToastModule
+ * @description HUD-style toast notification system.
+ */
+var ToastModule = (function () {
     var container = null;
 
     function getContainer() {
@@ -2321,11 +2350,23 @@ url) URL.revokeObjectURL(imgData.url);
       return container;
     }
 
-    function show(msg, type) {
+    function show(msg, type, onClick) {
       var c = getContainer();
       var toast = document.createElement('div');
       toast.className = 'toast toast-' + (type || 'info');
+      if (onClick) toast.style.cursor = 'pointer';
       toast.textContent = msg;
+
+      if (onClick) {
+        toast.addEventListener('click', function () {
+          onClick();
+          toast.classList.remove('toast-visible');
+          toast.classList.add('toast-exit');
+          setTimeout(function () {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+          }, 300);
+        });
+      }
 
       c.appendChild(toast);
       var rAF = (typeof requestAnimationFrame !== 'undefined') ? requestAnimationFrame : function (fn) { setTimeout(fn, 16); };
@@ -2343,16 +2384,17 @@ url) URL.revokeObjectURL(imgData.url);
     }
 
     return {
-      success: function (msg) { show(msg, 'success'); },
-      error:   function (msg) { show(msg, 'error'); },
-      info:    function (msg) { show(msg, 'info'); }
+      success: function (msg, onClick) { show(msg, 'success', onClick); },
+      error:   function (msg, onClick) { show(msg, 'error', onClick); },
+      info:    function (msg, onClick) { show(msg, 'info', onClick); }
     };
   }());
 
-  /* ============================================================
-     KeyboardModule — Keyboard Hotkeys
-     ============================================================ */
-  var KeyboardModule = (function () {
+  /**
+ * @module KeyboardModule
+ * @description Global keyboard hotkey handler.
+ */
+var KeyboardModule = (function () {
     return {
       init: function () {
         document.addEventListener('keydown', function (e) {
@@ -2390,10 +2432,11 @@ url) URL.revokeObjectURL(imgData.url);
     };
   }());
 
-  /* ============================================================
-     App Init
-     ============================================================ */
-  /* ProfilePhotoModule — Click-to-upload profile photo */
+  /**
+ * @module ProfilePhotoModule
+ * @description Click-to-upload circular profile photo.
+ */
+/* ProfilePhotoModule — Click-to-upload profile photo */
   var ProfilePhotoModule = (function () {
     var KEY = 'pd_profile_photo';
     return {
@@ -2444,8 +2487,11 @@ url) URL.revokeObjectURL(imgData.url);
     };
   }());
 
-  /* ClearViewModule — hide all content except navbar */
-  var ClearViewModule = (function () {
+  /**
+ * @module ClearViewModule
+ * @description Hides cards to show only navbar and images.
+ */
+var ClearViewModule = (function () {
     var isActive = false;
     var targets = ['.terminal-wrapper > .tactical-card', '.terminal-wrapper > .middle-grid',
                    '.terminal-wrapper > .palette-accordion', '.terminal-wrapper > footer',
@@ -2477,6 +2523,125 @@ url) URL.revokeObjectURL(imgData.url);
     };
   }());
 
+/**
+ * @module PWAModule
+ * @description Progressive Web App: service-worker registration, install
+ *   prompt, and update notification via ToastModule.
+ */
+var PWAModule = (function () {
+    var deferredPrompt = null;
+    var registration = null;
+
+    /* ---- dynamic theme-color ---- */
+    function syncThemeColor() {
+        try {
+            var theme = document.documentElement.getAttribute('data-theme');
+            var color = theme === 'light' ? '#EEF2F6' : '#0A0D18';
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', color);
+        } catch (_) { /* non-critical */ }
+    }
+
+    /* ---- show install banner ---- */
+    function showInstallBanner() {
+        ToastModule.info('Install "Our Time" for quick access', function () {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(function (result) {
+                if (result.outcome === 'accepted') {
+                    ToastModule.success('App installed!');
+                }
+                deferredPrompt = null;
+            });
+        });
+    }
+
+    /* ---- show update banner ---- */
+    function showUpdateBanner() {
+        ToastModule.info('Update available \u2014 click to refresh', function () {
+            if (!registration || !registration.waiting) return;
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        });
+    }
+
+    return {
+        /** @description Register SW and wire up install / update toasts. */
+        init: function () {
+            if (!('serviceWorker' in navigator)) {
+                console.warn('[PWA] Service workers not supported');
+                return;
+            }
+
+            navigator.serviceWorker.register('./sw.js')
+                .then(function (reg) {
+                    registration = reg;
+                    console.info('[PWA] Service worker registered, scope:', reg.scope);
+
+                    /* Listen for a new SW taking over */
+                    reg.addEventListener('updatefound', function () {
+                        var sw = reg.installing;
+                        if (!sw) return;
+                        sw.addEventListener('statechange', function () {
+                            if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+                                showUpdateBanner();
+                            }
+                        });
+                    });
+                })
+                .catch(function (err) {
+                    console.warn('[PWA] Registration failed:', err);
+                });
+
+            /* ---- beforeinstallprompt (Chrome / Edge) ---- */
+            window.addEventListener('beforeinstallprompt', function (e) {
+                e.preventDefault();
+                deferredPrompt = e;
+                /* Show the navbar download button */
+                var btn = document.getElementById('pwa-install-btn');
+                if (btn) {
+                    btn.hidden = false;
+                    btn.addEventListener('click', function () {
+                        if (!deferredPrompt) return;
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then(function (result) {
+                            if (result.outcome === 'accepted') {
+                                ToastModule.success('App installed!');
+                                btn.hidden = true;
+                            }
+                            deferredPrompt = null;
+                        });
+                    });
+                }
+                /* Delay toast slightly to avoid clutter on first load */
+                setTimeout(showInstallBanner, 5000);
+            });
+
+            /* ---- track installation ---- */
+            window.addEventListener('appinstalled', function () {
+                deferredPrompt = null;
+                var btn = document.getElementById('pwa-install-btn');
+                if (btn) btn.hidden = true;
+                ToastModule.success('Our Time is now installed!');
+            });
+
+            /* ---- detect standalone mode ---- */
+            if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+                var btn = document.getElementById('pwa-install-btn');
+                if (btn) btn.hidden = true;
+                console.info('[PWA] Running in standalone mode');
+            }
+
+            /* ---- sync theme-color on every theme toggle ---- */
+            var observer = new MutationObserver(syncThemeColor);
+            observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-theme']
+            });
+            syncThemeColor();
+        }
+    };
+}());
+
   var App = {
     init: function () {
       ThemeModule.init();
@@ -2494,6 +2659,7 @@ url) URL.revokeObjectURL(imgData.url);
       KeyboardModule.init();
       ProfilePhotoModule.init();
       ClearViewModule.init();
+      PWAModule.init();
     }
   };
 
