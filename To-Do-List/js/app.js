@@ -106,10 +106,18 @@
     if (!url || typeof url !== 'string') return '';
     var trimmed = url.trim();
     if (!trimmed) return '';
+    // Block javascript:, data:, vbscript: schemes
+    if (/^(javascript|data|vbscript):/i.test(trimmed)) return '';
     if (!/^[a-zA-Z][a-zA-Z0-9+\-.]*:\/\//i.test(trimmed)) {
       return 'https://' + trimmed;
     }
     return trimmed;
+  }
+
+  function isValidUrl(url) {
+    if (!url || typeof url !== 'string') return false;
+    var lower = url.trim().toLowerCase();
+    return /^https?:\/\//.test(lower);
   }
 
   function calculateEfficiency(done, total) {
@@ -1329,7 +1337,16 @@
       list.innerHTML = '';
 
       if (alarms.length === 0) {
-        list.innerHTML = '<div class="alarm-empty-state"><span class="alarm-empty-icon">&#8856;</span><span>No alarms configured</span></div>';
+        var emptyDiv = document.createElement('div');
+        emptyDiv.className = 'alarm-empty-state';
+        var emptyIcon = document.createElement('span');
+        emptyIcon.className = 'alarm-empty-icon';
+        emptyIcon.textContent = '∘';
+        var emptyText = document.createElement('span');
+        emptyText.textContent = 'No alarms configured';
+        emptyDiv.appendChild(emptyIcon);
+        emptyDiv.appendChild(emptyText);
+        list.appendChild(emptyDiv);
         return;
       }
 
@@ -2494,6 +2511,7 @@ url) URL.revokeObjectURL(imgData.url);
     formatMMSS: formatMMSS,
     normalizeUrl: normalizeUrl,
     calculateEfficiency: calculateEfficiency,
+    isValidUrl: isValidUrl,
     validateBounceFile: (typeof BounceImages !== "undefined") ? BounceImages.validateFile : null,
     BOUNCE_MAX_IMAGES: 5,
     BOUNCE_MAX_FILE_SIZE: 2 * 1024 * 1024
